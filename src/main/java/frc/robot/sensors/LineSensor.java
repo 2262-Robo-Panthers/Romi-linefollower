@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 public class LineSensor {
 	private AnalogInput m_input;
 
-	private int m_BGLevel = -1;
+	private int m_BGLevel = 0;
 	private int m_threshold = -1;
 
 	public LineSensor(int port) {
@@ -30,7 +30,7 @@ public class LineSensor {
 	}
 
 	public void calibrate() {
-		m_BGLevel = read();
+		m_BGLevel = 400;
 	}
 
 	public void setThreshold(int threshold) {

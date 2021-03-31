@@ -35,6 +35,7 @@ public class RomiDrivetrain extends SubsystemBase {
 	private final BuiltInAccelerometer m_accelerometer = new BuiltInAccelerometer(Range.k2G);
 
 	private final LineSensor m_leftSensor = new LineSensor(2);
+	private final LineSensor m_middleSensor = new LineSensor(4);
 	private final LineSensor m_rightSensor = new LineSensor(3);
 
 	// Set up the differential drive controller
@@ -52,9 +53,8 @@ public class RomiDrivetrain extends SubsystemBase {
 	public void periodic() {
 		// This method will be called once per scheduler run
 		SmartDashboard.putNumber("Left Sensor Raw", m_leftSensor.read());
+		SmartDashboard.putNumber("Middle Sensor Raw", m_middleSensor.read());
 		SmartDashboard.putNumber("Right Sensor Raw", m_rightSensor.read());
-		SmartDashboard.putNumber("Left Sensor Calibrated", m_leftSensor.calibratedRead());
-		SmartDashboard.putNumber("Right Sensor Calibrated", m_rightSensor.calibratedRead());
 		SmartDashboard.putNumber("Left Motor", m_leftMotor.get());
 		SmartDashboard.putNumber("Right Motor", m_rightMotor.get());
 	}
@@ -80,6 +80,10 @@ public class RomiDrivetrain extends SubsystemBase {
 
 	public LineSensor getLeftSensor() {
 		return m_leftSensor;
+	}
+
+	public LineSensor getMiddleSensor() {
+		return m_middleSensor;
 	}
 
 	public LineSensor getRightSensor() {
