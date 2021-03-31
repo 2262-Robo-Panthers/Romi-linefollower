@@ -14,5 +14,6 @@
     "**/.factorypath": true,
     "**/*~": true
   },
-  "wpilib.skipSelectSimulateExtension": true
+  "wpilib.skipSelectSimulateExtension": true,
+  "cmake.configureOnOpen": false
 }

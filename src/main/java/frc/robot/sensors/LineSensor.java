@@ -11,7 +11,7 @@ public class LineSensor {
 	private AnalogInput m_input;
 
 	private int m_BGLevel = -1;
-	private int m_detectLevel = -1;
+	private int m_threshold = -1;
 
 	public LineSensor(int port) {
 		m_input = new AnalogInput(port);
@@ -21,29 +21,24 @@ public class LineSensor {
 		return m_input.getValue();
 	}
 
+	public int calibratedRead() {
+		return read() - m_BGLevel;
+	}
+
 	public boolean check() {
-		final int level = read();
-		if (m_BGLevel < m_detectLevel) {
-			final int threshold = (m_detectLevel - m_BGLevel) >> 2;
-			return level - threshold > m_BGLevel;
-		} else {
-			final int threshold = (m_BGLevel - m_detectLevel) >> 2;
-			return level + threshold < m_BGLevel;
-		}
+		return calibratedRead() > m_threshold;
 	}
 
-	public int setBGLevel() {
+	public void calibrate() {
 		m_BGLevel = read();
-		return m_BGLevel;
 	}
 
-	public int setDetectLevel() {
-		m_detectLevel = read();
-		return m_detectLevel;
+	public void setThreshold(int threshold) {
+		m_threshold = threshold;
 	}
 
 	public boolean calStatus() {
-		return m_BGLevel != -1 && m_detectLevel != -1;
+		return m_BGLevel != -1 && m_threshold != -1;
 	}
 
 }

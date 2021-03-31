@@ -51,8 +51,10 @@ public class RomiDrivetrain extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		SmartDashboard.putNumber("Left Sensor", m_leftSensor.read());
-		SmartDashboard.putNumber("Right Sensor", m_rightSensor.read());
+		SmartDashboard.putNumber("Left Sensor Raw", m_leftSensor.read());
+		SmartDashboard.putNumber("Right Sensor Raw", m_rightSensor.read());
+		SmartDashboard.putNumber("Left Sensor Calibrated", m_leftSensor.calibratedRead());
+		SmartDashboard.putNumber("Right Sensor Calibrated", m_rightSensor.calibratedRead());
 		SmartDashboard.putNumber("Left Motor", m_leftMotor.get());
 		SmartDashboard.putNumber("Right Motor", m_rightMotor.get());
 	}

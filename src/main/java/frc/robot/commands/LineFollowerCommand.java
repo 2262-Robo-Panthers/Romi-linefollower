@@ -14,8 +14,7 @@ public class LineFollowerCommand extends CommandBase {
 	private final LineSensor m_leftSensor;
 	private final LineSensor m_rightSensor;
 
-	private final int kThreshold = 300;
-	private final double kSpeedVolts = 6;
+	private static final double kSpeedVolts = 3;
 
 	/** Creates a new LineFollowerCommand. */
 	public LineFollowerCommand(RomiDrivetrain drivetrain) {
@@ -29,15 +28,17 @@ public class LineFollowerCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		m_leftSensor.setBGLevel();
-		m_rightSensor.setBGLevel();
+		m_leftSensor.calibrate();
+		m_rightSensor.calibrate();
+		m_leftSensor.setThreshold(50);
+		m_rightSensor.setThreshold(50);
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		if (m_leftSensor.read() > kThreshold) m_drivetrain.tankDriveVolts(kSpeedVolts, 0);
-		else if (m_rightSensor.read() > kThreshold) m_drivetrain.tankDriveVolts(0, kSpeedVolts);
+		if (m_leftSensor.check()) m_drivetrain.tankDriveVolts(kSpeedVolts, 0);
+		else if (m_rightSensor.check()) m_drivetrain.tankDriveVolts(0, kSpeedVolts);
 		else m_drivetrain.tankDriveVolts(kSpeedVolts, kSpeedVolts);
 	}
 
@@ -50,6 +51,6 @@ public class LineFollowerCommand extends CommandBase {
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return m_leftSensor.read() > kThreshold && m_rightSensor.read() > kThreshold;
+		return false;
 	}
 }
