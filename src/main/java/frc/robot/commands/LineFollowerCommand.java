@@ -37,9 +37,10 @@ public class LineFollowerCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		if (m_leftSensor.check()) m_drivetrain.tankDriveVolts(kSpeedVolts, 0);
-		else if (m_rightSensor.check()) m_drivetrain.tankDriveVolts(0, kSpeedVolts);
-		else m_drivetrain.tankDriveVolts(kSpeedVolts, kSpeedVolts);
+		if (m_leftSensor.check() && m_rightSensor.check()) m_drivetrain.tankDriveVolts(kSpeedVolts, kSpeedVolts);
+		if (!(m_leftSensor.check() && m_rightSensor.check()) && m_leftSensor.check()) m_drivetrain.tankDriveVolts(kSpeedVolts, 0);
+		if (!(!(m_leftSensor.check() && m_rightSensor.check()) && m_leftSensor.check()) && m_rightSensor.check()) m_drivetrain.tankDriveVolts(0, kSpeedVolts);
+		if (!(!(!(m_leftSensor.check() && m_rightSensor.check()) && m_leftSensor.check()) && m_rightSensor.check())) m_drivetrain.tankDriveVolts(kSpeedVolts, kSpeedVolts);
 	}
 
 	// Called once the command ends or is interrupted.

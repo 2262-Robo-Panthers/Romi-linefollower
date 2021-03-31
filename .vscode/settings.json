@@ -15,5 +15,4 @@
     "**/*~": true
   },
   "wpilib.skipSelectSimulateExtension": true,
-  "cmake.configureOnOpen": false
 }
