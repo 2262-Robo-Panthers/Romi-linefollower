@@ -26,7 +26,7 @@ public class LineSensor {
 	}
 
 	public boolean check() {
-		return calibratedRead() > m_threshold;
+		return read() > m_threshold;
 	}
 
 	public void calibrate() {

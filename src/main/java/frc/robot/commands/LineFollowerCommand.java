@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.sensors.LineSensor;
 import frc.robot.subsystems.RomiDrivetrain;
@@ -17,7 +18,13 @@ public class LineFollowerCommand extends CommandBase {
 	private final LineSensor m_rightSensor;
 
 	private static final int kThreshold = 800;
-	private static final double kSpeedVolts = 1.5;
+	private static final double kSpeedVolts = 6;
+	private static final double kI = 0.05;
+	private static final double kF = 0.5;
+
+	private double m_integrator = 0;
+	private boolean m_isLeft = true;
+	private double m_lastTimestamp = -1;
 
 	/** Creates a new LineFollowerCommand. */
 	public LineFollowerCommand(RomiDrivetrain drivetrain) {
@@ -40,10 +47,20 @@ public class LineFollowerCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		if (m_middleSensor.check()) m_drivetrain.tankDriveVolts(kSpeedVolts, kSpeedVolts);
-		else if (m_rightSensor.check()) m_drivetrain.tankDriveVolts(-kSpeedVolts, kSpeedVolts);
-		else if (m_leftSensor.check()) m_drivetrain.tankDriveVolts(kSpeedVolts, -kSpeedVolts);
-		else m_drivetrain.tankDriveVolts(kSpeedVolts, kSpeedVolts);
+		if (m_rightSensor.check()) {
+			m_drivetrain.tankDriveVolts(kSpeedVolts * (0.5 + kF), kSpeedVolts * (0.5 - kF));
+			m_isLeft = false;
+		}
+		else if (m_leftSensor.check()) {
+			m_drivetrain.tankDriveVolts(kSpeedVolts * (0.5 - kF), kSpeedVolts * (0.5 + kF));
+			m_isLeft = true;
+		}
+		else {
+			m_drivetrain.tankDriveVolts(kSpeedVolts, kSpeedVolts);
+		}
+		double dt = m_lastTimestamp > 0 ? Timer.getFPGATimestamp() - m_lastTimestamp : 0.02;
+		m_lastTimestamp = Timer.getFPGATimestamp();
+		m_integrator += m_middleSensor.check() ? 0 : kI * (m_isLeft ? 1.0 : -1.0) * dt / 0.02;
 	}
 
 	// Called once the command ends or is interrupted.

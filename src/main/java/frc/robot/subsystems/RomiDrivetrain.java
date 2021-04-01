@@ -35,7 +35,7 @@ public class RomiDrivetrain extends SubsystemBase {
 	private final BuiltInAccelerometer m_accelerometer = new BuiltInAccelerometer(Range.k2G);
 
 	private final LineSensor m_leftSensor = new LineSensor(2);
-	private final LineSensor m_middleSensor = new LineSensor(4);
+	private final LineSensor m_middleSensor = new LineSensor(1);
 	private final LineSensor m_rightSensor = new LineSensor(3);
 
 	// Set up the differential drive controller
